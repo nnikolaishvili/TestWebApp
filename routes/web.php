@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::redirect('/', '/login');
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [OrdersController::class, 'index'])->name('index');
+        Route::prefix('{order}')->group(function () {
+            Route::get('/', [OrdersController::class, 'show'])->name('show');
+            Route::get('/edit', [OrdersController::class, 'edit'])->name('edit');
+            Route::patch('/', [OrdersController::class, 'update'])->name('update');
+            Route::delete('/delete', [OrdersController::class, 'destroy'])->name('destroy');
+        });
+    });
 });
+
+require __DIR__.'/auth.php';

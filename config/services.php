@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'storeden' => [
+        'endpoint_url' => env('STOREDEN_ENDPOINT_URL', 'https://connect.storeden.com'),
+        'api_version' => env('STOREDEN_API_VERSION', 'v1.1'),
+        'key' => env('STOREDEN_KEY'),
+        'exchange' => env('STOREDEN_EXCHANGE')
+    ]
 ];
