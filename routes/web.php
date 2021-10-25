@@ -18,6 +18,7 @@ Route::redirect('/', '/login');
 Route::middleware(['auth'])->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [OrdersController::class, 'index'])->name('index');
+        Route::post('/', [OrdersController::class, 'export'])->name('export');
         Route::prefix('{order}')->group(function () {
             Route::get('/', [OrdersController::class, 'show'])->name('show');
             Route::get('/edit', [OrdersController::class, 'edit'])->name('edit');

@@ -15,9 +15,20 @@
                         @endif
                     </div>
                     <div class="flex items-center">
-                        <form action="" class="my-3 mr-3 flex">
-                            <x-input id="search-order" class="block text-sm" type="text" name="search" placeholder="type..."/>
-                            <button type="submit" class="ml-3 text-sm bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Search</button>
+                        <form action="" class="my-3 mr-3 flex" id="search-orders-form">
+                            <x-input class="block text-sm mr-3" type="text" name="search"
+                                     :value="$searchValue" placeholder="type id..."/>
+                            <x-transparent-button class="hover:bg-blue-500 text-blue-700 px-4 border-blue-500">
+                                {{ __('Search') }}
+                            </x-transparent-button>
+                        </form>
+                        <form action="{{ route('orders.export') }}" class="my-3 mr-3 flex" method="POST"
+                              id="export-orders-form">
+                            @csrf
+                            <input type="hidden" value="{{ $searchValue }}" name="search">
+                            <x-transparent-button class="hover:bg-green-500 text-green-700 px-3 border-green-500">
+                                {{ __('Export') }} <i class="fas fa-file-export"></i>
+                            </x-transparent-button>
                         </form>
                     </div>
                 </div>
@@ -38,16 +49,20 @@
                                 {{ $order->order_id }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                    {{ $order->status->name }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-end">
-                                <a href="{{ route('orders.show', $order->id) }}" class="text-blue-700 hover:text-indigo-900">{{ __('Show') }}</a>
+                                <a href="{{ route('orders.show', $order->id) }}"
+                                   class="text-blue-700 hover:text-indigo-900">{{ __('Show') }}</a>
                                 <span class="mx-1">|</span>
-                                <a href="{{ route('orders.edit', $order->id) }}" class="text-yellow-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                <a href="{{ route('orders.edit', $order->id) }}"
+                                   class="text-yellow-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                 <span class="mx-1">|</span>
-                                <form action="{{ route('orders.destroy', $order->id) }}" method="POST" id="delete-order-form">
+                                <form action="{{ route('orders.destroy', $order->id) }}" method="POST"
+                                      id="delete-order-form">
                                     @csrf
                                     @method('DELETE')
 
@@ -57,7 +72,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">No data available yet</td>
+                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                                {{ __('No data available yet') }}
+                            </td>
                         </tr>
                     @endforelse
                     </tbody>

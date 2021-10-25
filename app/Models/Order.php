@@ -12,6 +12,8 @@ class Order extends Model
 
     protected $dates = ['date'];
 
+    const TABLE_HEADERS = ['order ID', 'total', 'date', 'status'];
+
     /**
      * The attributes that are mass assignable.
      *
