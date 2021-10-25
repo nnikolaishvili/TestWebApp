@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class OrderStatus extends Model
 {
     use HasFactory;
 
@@ -16,5 +16,6 @@ class Status extends Model
      */
     protected $fillable = [
         'name',
+        'foreign_api_id',
     ];
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,7 @@ class UsersTableSeeder extends Seeder
     {
         $data = [
             [
+                'role_id' => Role::ADMIN,
                 'name' => 'Admin',
                 'email' => 'admin@test.com',
                 'email_verified_at' => now(),
@@ -25,6 +27,7 @@ class UsersTableSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'role_id' => Role::EDITOR,
                 'name' => 'Editor',
                 'email' => 'editor@test.com',
                 'email_verified_at' => now(),
@@ -33,6 +36,7 @@ class UsersTableSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'role_id' => Role::ASSISTANT,
                 'name' => 'Assistant',
                 'email' => 'assistant@test.com',
                 'email_verified_at' => now(),

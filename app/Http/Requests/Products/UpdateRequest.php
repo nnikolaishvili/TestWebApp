@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Orders;
+namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,19 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status_id' => 'required|exists:statuses,id'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes(): array
-    {
-        return [
-            'status_id' => 'status'
+            'title' => 'required|string',
+            'status' => 'required|boolean',
+            'image_file' => 'sometimes|image'
         ];
     }
 }

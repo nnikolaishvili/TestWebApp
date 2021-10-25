@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('order_id');
             $table->float('total');
             $table->timestamp('date');
-            $table->foreignId('status_id')->constrained()->restrictOnDelete();
+            $table->foreignId('status_id')->constrained('order_statuses')->restrictOnDelete();
             $table->timestamps();
         });
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,16 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/edit', [OrdersController::class, 'edit'])->name('edit');
             Route::patch('/', [OrdersController::class, 'update'])->name('update');
             Route::delete('/delete', [OrdersController::class, 'destroy'])->name('destroy');
+        });
+    });
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/', [ProductsController::class, 'index'])->name('index');
+        Route::post('/', [ProductsController::class, 'export'])->name('export');
+        Route::prefix('{product}')->group(function () {
+            Route::get('/', [ProductsController::class, 'show'])->name('show');
+            Route::get('/edit', [ProductsController::class, 'edit'])->name('edit');
+            Route::patch('/', [ProductsController::class, 'update'])->name('update');
+            Route::delete('/delete', [ProductsController::class, 'destroy'])->name('destroy');
         });
     });
 });

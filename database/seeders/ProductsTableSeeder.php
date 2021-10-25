@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\FetchOrdersJob;
+use App\Jobs\FetchProductsJob;
 use Exception;
 use Illuminate\Database\Seeder;
 
-class OrdersTableSeeder extends Seeder
+class ProductsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,6 +16,6 @@ class OrdersTableSeeder extends Seeder
      */
     public function run()
     {
-        dispatch_sync(new FetchOrdersJob);
+        dispatch_sync(new FetchProductsJob);
     }
 }

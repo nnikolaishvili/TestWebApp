@@ -31,8 +31,7 @@ return [
     ],
 
     'storeden' => [
-        'endpoint_url' => env('STOREDEN_ENDPOINT_URL', 'https://connect.storeden.com'),
-        'api_version' => env('STOREDEN_API_VERSION', 'v1.1'),
+        'api_url' => env('STOREDEN_API_URL', 'https://connect.storeden.com/v1.1/'),
         'key' => env('STOREDEN_KEY'),
         'exchange' => env('STOREDEN_EXCHANGE')
     ]

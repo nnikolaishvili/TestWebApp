@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Interfaces\FetchOrdersInterface;
+use App\Services\Interfaces\FetchProductsInterface;
+use App\Services\Storeden\StoredenOrdersService;
+use App\Services\Storeden\StoredenProductsService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +17,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(FetchOrdersInterface::class, function () {
+            return new StoredenOrdersService();
+        });
+
+        $this->app->bind(FetchProductsInterface::class, function () {
+            return new StoredenProductsService();
+        });
     }
 
     /**

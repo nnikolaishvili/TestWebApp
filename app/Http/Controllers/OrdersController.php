@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Orders\ExportRequest;
-use App\Http\Requests\Orders\UpdateRequest;
-use App\Models\Order;
-use App\Models\Status;
+use App\Http\Requests\{SearchRequest, Orders\UpdateRequest};
+use App\Models\{Order, OrderStatus};
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -17,20 +14,20 @@ class OrdersController extends Controller
     /**
      * View of the orders
      *
-     * @param Request $request
+     * @param SearchRequest $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(SearchRequest $request): View
     {
+        $validated = $request->validated();
+        $searchValue = $validated['search'] ?? null;
         $query = Order::with('status:id,name');
-        $searchValue = $request->search;
-        if ($request->has('search') && !empty($searchValue)) {
-            $query = $query->where('order_id', 'like', "%$request->search%");
+        if ($searchValue) {
+            $query = $query->where('order_id', 'like', "%$searchValue%");
         }
 
         return view('orders.index', [
             'searchValue' => $searchValue,
-            'ordersCount' => $query->count(),
             'orders' => $query->paginate(10)->appends(['search' => $searchValue])
         ]);
     }
@@ -38,17 +35,18 @@ class OrdersController extends Controller
     /**
      * Export of the orders
      *
-     * @param ExportRequest $request
+     * @param SearchRequest $request
      * @return BinaryFileResponse
      */
-    public function export(ExportRequest $request): BinaryFileResponse
+    public function export(SearchRequest $request): BinaryFileResponse
     {
         $validated = $request->validated();
+        $search = $validated['search'] ?? null;
         $query = Order::with('status');
-        $orders = $validated['search'] ?
-            $query->where('order_id', 'like', '%' . $validated['search'] . '%')->get() :
-            $query->get();
-
+        if ($search) {
+            $query = $query->where('order_id', 'like', "%$search%");
+        }
+        $orders = $query->get();
         $filename = 'export.csv';
         $handle = fopen($filename, 'w+');
         fputcsv($handle, Order::TABLE_HEADERS);
@@ -61,9 +59,8 @@ class OrdersController extends Controller
             ]);
         }
         fclose($handle);
-        $headers = ['Content-Type', 'text/csv'];
 
-        return Response::download($filename, $filename, $headers);
+        return Response::download($filename, $filename, ['Content-Type', 'text/csv']);
     }
 
     /**
@@ -85,7 +82,7 @@ class OrdersController extends Controller
      */
     public function edit(Order $order): View
     {
-        $statuses = Status::pluck('name', 'id')->toArray();
+        $statuses = OrderStatus::pluck('name', 'id')->toArray();
 
         return view('orders.edit', compact('order', 'statuses'));
     }
@@ -97,7 +94,7 @@ class OrdersController extends Controller
      * @param UpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(Order $order, UpdateRequest $request)
+    public function update(Order $order, UpdateRequest $request): RedirectResponse
     {
         $order->update($request->validated());
 
@@ -110,7 +107,7 @@ class OrdersController extends Controller
      * @param Order $order
      * @return RedirectResponse
      */
-    public function destroy(Order $order)
+    public function destroy(Order $order): RedirectResponse
     {
         $order->delete();
 
