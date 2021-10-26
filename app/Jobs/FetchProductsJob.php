@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class FetchProductsJob implements ShouldQueue
 {
@@ -36,6 +37,7 @@ class FetchProductsJob implements ShouldQueue
 
         if (Product::count()) {
             Product::truncate();
+            Storage::disk('public')->deleteDirectory('images/products');
         }
 
         Product::insert($products);

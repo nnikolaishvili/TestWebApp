@@ -41,7 +41,7 @@ class OrdersController extends Controller
     public function export(SearchRequest $request): BinaryFileResponse
     {
         $validated = $request->validated();
-        $orders = Order::with('status')->search($validated['search'] ?? null)->get();
+        $orders = Order::with('status:id,name')->search($validated['search'] ?? null)->get();
         $filename = 'export.csv';
         $handle = fopen($filename, 'w+');
         fputcsv($handle, Order::TABLE_HEADERS);
