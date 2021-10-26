@@ -14,15 +14,15 @@ foo@bar:~$ cd TestWebApp
 ```
 - Install composer
 ```console
-foo@bar:~$ composer install
+foo@bar:~/TestWebApp$ composer install
 ```
 - Copy .env.example file into .env
 ```console
-foo@bar:~$ cp .env.example .env
+foo@bar:~/TestWebApp$ cp .env.example .env
 ```
 - Generate the application key
 ```console
-foo@bar:~$ php artisan key:generate
+foo@bar:~/TestWebApp$ php artisan key:generate
 ```
 ---
 ### Configure .env file & set the correct values for the keys mentioned below
@@ -31,26 +31,26 @@ foo@bar:~$ php artisan key:generate
 ---
 - Install npm & compile the assets
 ```console
-foo@bar:~$ npm install
-foo@bar:~$ npm run dev
+foo@bar:~/TestWebApp$ npm install
+foo@bar:~/TestWebApp$ npm run dev
 ```
 - Link the storage
 ```console
-foo@bar:~$ php artisan storage:link
+foo@bar:~/TestWebApp$ php artisan storage:link
 ```
 ### Note: .env file should to be configured before running the command below
 - Run migrations & seed the tables
 ```console
-foo@bar:~$ php artisan migrate --seed
+foo@bar:~/TestWebApp$ php artisan migrate --seed
 ```
 
 ---
 
 For running the server you can use the command
 ```console
-foo@bar:~$ php artisan serve
+foo@bar:~/TestWebApp$ php artisan serve
 ```
-### Users credentials that you can use to athenticate
+### Users credentials that you can use to authenticate
 - admin@test.com TestAdmin123
 - editor@test.com TestEditor123
 - assistant@test.com TestAssistant123
