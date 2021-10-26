@@ -49,6 +49,8 @@ foo@bar:~/TestWebApp$ php artisan migrate --seed
 For running the server you can use the command
 ```console
 foo@bar:~/TestWebApp$ php artisan serve
+
+(set APP_URL=http://localhost:8000 in .env)
 ```
 ### Users credentials that you can use to authenticate
 - admin@test.com TestAdmin123
