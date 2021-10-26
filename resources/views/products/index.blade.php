@@ -29,13 +29,16 @@
                                 {{ __('Export') }} <i class="fas fa-file-export"></i>
                             </x-transparent-button>
                         </form>
-                        <form action="{{ route('products.fetch') }}" class="my-3 mr-3 flex" method="POST"
-                              id="fetch-products-form">
-                            @csrf
-                            <x-transparent-button id="fetch-products-button" class="hover:bg-yellow-500 text-yellow-700 px-3 border-yellow-500">
-                                {{ __('Refresh table') }}<i class="fas fa-sync ml-1"></i>
-                            </x-transparent-button>
-                        </form>
+                        @can('refresh-tables')
+                            <form action="{{ route('products.fetch') }}" class="my-3 mr-3 flex" method="POST"
+                                  id="fetch-products-form">
+                                @csrf
+                                <x-transparent-button id="fetch-products-button"
+                                                      class="hover:bg-yellow-500 text-yellow-700 px-3 border-yellow-500">
+                                    {{ __('Refresh table') }}<i class="fas fa-sync ml-1"></i>
+                                </x-transparent-button>
+                            </form>
+                        @endcan
                     </div>
                 </div>
 

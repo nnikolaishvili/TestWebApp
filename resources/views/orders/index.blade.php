@@ -30,13 +30,16 @@
                                 </x-transparent-button>
                             </form>
                         @endcan
-                        <form action="{{ route('orders.fetch') }}" class="my-3 mr-3 flex" method="POST"
-                              id="fetch-orders-form">
-                            @csrf
-                            <x-transparent-button id="fetch-orders-button" class="hover:bg-yellow-500 text-yellow-700 px-3 border-yellow-500">
-                                {{ __('Refresh table') }}<i class="fas fa-sync ml-1"></i>
-                            </x-transparent-button>
-                        </form>
+                        @can('refresh-tables')
+                            <form action="{{ route('orders.fetch') }}" class="my-3 mr-3 flex" method="POST"
+                                  id="fetch-orders-form">
+                                @csrf
+                                <x-transparent-button id="fetch-orders-button"
+                                                      class="hover:bg-yellow-500 text-yellow-700 px-3 border-yellow-500">
+                                    {{ __('Refresh table') }}<i class="fas fa-sync ml-1"></i>
+                                </x-transparent-button>
+                            </form>
+                        @endcan
                     </div>
                 </div>
 
@@ -64,12 +67,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-end">
                                 <a href="{{ route('orders.show', $order->id) }}"
                                    class="text-blue-700 hover:text-indigo-900">{{ __('Show') }}</a>
-                                @can('update-order')
+                                @can('modify-order')
                                     <span class="mx-1">|</span>
                                     <a href="{{ route('orders.edit', $order->id) }}"
                                        class="text-yellow-600 hover:text-indigo-900">{{ __('Edit') }}</a>
-                                @endcan
-                                @can('cancel-order')
                                     <span class="mx-1">|</span>
                                     <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
                                           id="cancel-order-form">

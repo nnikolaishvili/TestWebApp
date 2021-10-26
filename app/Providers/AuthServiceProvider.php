@@ -26,11 +26,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-order', function (User $user) {
+        Gate::define('refresh-tables', function (User $user) {
+            return $user->isAdmin();
+        });
+
+        Gate::define('modify-order', function (User $user) {
              return $user->isAdmin();
         });
 
-        Gate::define('cancel-order', function (User $user) {
+        Gate::define('add-users', function (User $user) {
             return $user->isAdmin();
         });
 

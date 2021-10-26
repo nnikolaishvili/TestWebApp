@@ -29,7 +29,7 @@
                             <div class="mb-3">
                                 <x-label for="title" :value="__('Title')"/>
                                 <x-input id="title" class="block mt-1 w-full text-sm" type="text"
-                                         name="title" :value="$product->title"/>
+                                         name="title" :value="$product->title" required/>
                             </div>
                             <div class="mb-3">
                                 <x-label for="code" :value="__('Code')"/>

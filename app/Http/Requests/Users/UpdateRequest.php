@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Users;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,7 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => 'nullable|string|max:255'
+            'role_id' => 'required|integer|in:' . Role::EDITOR . ',' . Role::ASSISTANT,
         ];
     }
 }

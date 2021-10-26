@@ -24,6 +24,14 @@
                         </x-nav-link>
                     </div>
                 @endcan
+
+                @can('add-users')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->
@@ -88,6 +96,14 @@
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                     {{ __('Products') }}
+                </x-responsive-nav-link>
+            </div>
+        @endcan
+
+        @can('add-users')
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    {{ __('Users') }}
                 </x-responsive-nav-link>
             </div>
         @endcan
