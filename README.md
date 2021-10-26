@@ -10,7 +10,7 @@ Test web application that fetches orders & products from third-party API.
 - Clone the project and move to the directory
 ```console
 foo@bar:~$ git clone https://github.com/nnikolaishvili/TestWebApp.git TestWebApp
-foo@bar:~$ mv TestWebApp
+foo@bar:~$ cd TestWebApp
 ```
 - Install composer
 ```console
