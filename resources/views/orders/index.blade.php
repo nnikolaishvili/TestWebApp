@@ -59,12 +59,12 @@
                                 <a href="{{ route('orders.edit', $order->id) }}"
                                    class="text-yellow-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                 <span class="mx-1">|</span>
-                                <form action="{{ route('orders.destroy', $order->id) }}" method="POST"
-                                      id="delete-order-form">
+                                <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
+                                      id="cancel-order-form">
                                     @csrf
-                                    @method('DELETE')
+                                    @method('PATCH')
 
-                                    <button type="submit" class="text-red-600">{{ __('Delete') }}</button>
+                                    <button type="submit" class="text-red-600">{{ __('Cancel') }}</button>
                                 </form>
                             </td>
                         </tr>

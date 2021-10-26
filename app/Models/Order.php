@@ -5,14 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
-    protected $dates = ['date'];
-
+    const DELETED_AT = 'canceled_at';
     const TABLE_HEADERS = ['order ID', 'total', 'date', 'status'];
+
+    /**
+     * The dates
+     *
+     * @var string[]
+     */
+    protected $dates = ['date'];
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +31,7 @@ class Order extends Model
         'total',
         'date',
         'status_id',
+        'canceled_at'
     ];
 
     /**
@@ -34,5 +42,15 @@ class Order extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class);
+    }
+
+    /**
+     * Soft delete order
+     *
+     * @return bool|null
+     */
+    public function cancel(): ?bool
+    {
+        return $this->delete();
     }
 }

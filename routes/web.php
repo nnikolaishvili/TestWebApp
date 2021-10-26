@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [OrdersController::class, 'show'])->name('show');
             Route::get('/edit', [OrdersController::class, 'edit'])->name('edit');
             Route::patch('/', [OrdersController::class, 'update'])->name('update');
-            Route::delete('/delete', [OrdersController::class, 'destroy'])->name('destroy');
+            Route::patch('/cancel', [OrdersController::class, 'cancel'])->name('cancel');
         });
     });
     Route::prefix('products')->name('products.')->group(function () {

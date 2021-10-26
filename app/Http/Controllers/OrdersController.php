@@ -102,14 +102,14 @@ class OrdersController extends Controller
     }
 
     /**
-     * Delete order
+     * Cancel order
      *
      * @param Order $order
      * @return RedirectResponse
      */
-    public function destroy(Order $order): RedirectResponse
+    public function cancel(Order $order): RedirectResponse
     {
-        $order->delete();
+        $order->cancel();
 
         return redirect()->back();
     }

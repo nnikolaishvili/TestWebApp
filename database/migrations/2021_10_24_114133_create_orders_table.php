@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('date');
             $table->foreignId('status_id')->constrained('order_statuses')->restrictOnDelete();
             $table->timestamps();
+            $table->timestamp('canceled_at')->nullable();
         });
     }
 
