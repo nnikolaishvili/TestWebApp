@@ -11,6 +11,14 @@ $(function () {
         return confirm('Are you sure?');
     })
 
+    $(document).on('submit', '#fetch-orders-form', function () {
+        $('#fetch-orders-button').prop('disabled', true);
+    })
+
+    $(document).on('submit', '#fetch-products-form', function () {
+        $('#fetch-products-button').prop('disabled', true);
+    })
+
     $(document).on('change', '#image_file', function () {
         const file = this.files[0];
         if (file) {

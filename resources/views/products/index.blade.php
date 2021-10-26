@@ -16,7 +16,7 @@
                     <div class="flex items-center">
                         <form action="" class="my-3 mr-3 flex" id="search-products-form">
                             <x-input class="block text-sm mr-3" type="text" name="search"
-                                     :value="$searchValue" placeholder="title"/>
+                                     :value="$searchValue" placeholder="uid or title"/>
                             <x-transparent-button class="hover:bg-blue-500 text-blue-700 px-4 border-blue-500">
                                 {{ __('Search') }}
                             </x-transparent-button>
@@ -27,6 +27,13 @@
                             <input type="hidden" value="{{ $searchValue }}" name="search">
                             <x-transparent-button class="hover:bg-green-500 text-green-700 px-3 border-green-500">
                                 {{ __('Export') }} <i class="fas fa-file-export"></i>
+                            </x-transparent-button>
+                        </form>
+                        <form action="{{ route('products.fetch') }}" class="my-3 mr-3 flex" method="POST"
+                              id="fetch-products-form">
+                            @csrf
+                            <x-transparent-button id="fetch-products-button" class="hover:bg-yellow-500 text-yellow-700 px-3 border-yellow-500">
+                                {{ __('Refresh table') }}<i class="fas fa-sync ml-1"></i>
                             </x-transparent-button>
                         </form>
                     </div>
@@ -79,7 +86,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                                 {{ __('No data available yet') }}
                             </td>
                         </tr>

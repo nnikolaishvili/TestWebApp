@@ -34,6 +34,10 @@ class FetchProductsJob implements ShouldQueue
     {
         $products = $fetchProducts->fetchProducts();
 
+        if (Product::count()) {
+            Product::truncate();
+        }
+
         Product::insert($products);
     }
 }

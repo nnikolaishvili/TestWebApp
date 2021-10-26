@@ -35,7 +35,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-end">
-                            <a href="{{ route('orders.index') }}"
+                            <a href="{{ url()->current() == url()->previous() ? route('orders.index') : url()->previous() }}"
                                class="text-indigo-600 hover:text-indigo-900">{{ __('Go back') }}</a>
                         </td>
                     </tr>

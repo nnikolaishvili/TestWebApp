@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id');
+            $table->string('order_id')->unique();
             $table->float('total');
             $table->timestamp('date');
             $table->foreignId('status_id')->constrained('order_statuses')->restrictOnDelete();

@@ -35,6 +35,10 @@ class FetchOrdersJob implements ShouldQueue
     {
         $orders = $fetchOrders->fetchOrders();
 
+        if (Order::count()) {
+            Order::truncate();
+        }
+
         Order::insert($orders);
     }
 }

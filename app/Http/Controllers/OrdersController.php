@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FetchOrdersJob;
 use App\Http\Requests\{SearchRequest, Orders\UpdateRequest};
 use App\Models\{Order, OrderStatus};
 use Illuminate\Contracts\View\View;
@@ -21,14 +22,13 @@ class OrdersController extends Controller
     {
         $validated = $request->validated();
         $searchValue = $validated['search'] ?? null;
-        $query = Order::with('status:id,name');
-        if ($searchValue) {
-            $query = $query->where('order_id', 'like', "%$searchValue%");
-        }
+        $orders = Order::with('status:id,name')
+            ->search($searchValue)->paginate(Order::ITEMS_PER_PAGE)
+            ->appends(['search' => $searchValue]);
 
         return view('orders.index', [
             'searchValue' => $searchValue,
-            'orders' => $query->paginate(10)->appends(['search' => $searchValue])
+            'orders' => $orders
         ]);
     }
 
@@ -41,12 +41,7 @@ class OrdersController extends Controller
     public function export(SearchRequest $request): BinaryFileResponse
     {
         $validated = $request->validated();
-        $search = $validated['search'] ?? null;
-        $query = Order::with('status');
-        if ($search) {
-            $query = $query->where('order_id', 'like', "%$search%");
-        }
-        $orders = $query->get();
+        $orders = Order::with('status')->search($validated['search'] ?? null)->get();
         $filename = 'export.csv';
         $handle = fopen($filename, 'w+');
         fputcsv($handle, Order::TABLE_HEADERS);
@@ -112,5 +107,17 @@ class OrdersController extends Controller
         $order->cancel();
 
         return redirect()->back();
+    }
+
+    /**
+     * Refresh table - fetch orders from API and replace with the old ones
+     *
+     * @return RedirectResponse
+     */
+    public function fetch(): RedirectResponse
+    {
+        dispatch_sync(new FetchOrdersJob);
+
+        return redirect()->route('orders.index');
     }
 }

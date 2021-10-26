@@ -23,7 +23,7 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $product->image_url }}
+                            <img src="{{ $product->image_full_path ?? asset('images/no_image.png') }}" alt="" style="max-width: 80px">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {{ $product->uid }}
@@ -46,9 +46,11 @@
                                {{ $product->status_name }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-end">
-                            <a href="{{ route('products.index') }}"
-                               class="text-indigo-600 hover:text-indigo-900">{{ __('Go back') }}</a>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div>
+                                <a href="{{ url()->current() == url()->previous() ? route('products.index') : url()->previous() }}"
+                                   class="text-indigo-600 hover:text-indigo-900">{{ __('Go back') }}</a>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

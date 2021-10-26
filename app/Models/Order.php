@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, SearchableTrait;
+
+    const ITEMS_PER_PAGE = 10;
 
     const DELETED_AT = 'canceled_at';
+
     const TABLE_HEADERS = ['order ID', 'total', 'date', 'status'];
 
     /**
@@ -32,6 +36,15 @@ class Order extends Model
         'date',
         'status_id',
         'canceled_at'
+    ];
+
+    /**
+     * The searchable fields
+     *
+     * @var string[]
+     */
+    protected $searchable = [
+        'order_id'
     ];
 
     /**

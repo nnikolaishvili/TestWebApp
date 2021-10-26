@@ -50,11 +50,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="px-3 py-5">
+                    <div class="px-4 py-5">
                         <x-button>{{ __('Save') }}</x-button>
 
                         <!-- Cancel -->
-                        <a href="{{ route('orders.index') }}"
+                        <a href="{{ url()->current() == url()->previous() ? route('orders.index') : url()->previous() }}"
                            class="text-indigo-600 pl-3 hover:text-indigo-900 text-sm font-medium">{{ __('Go back') }}</a>
                     </div>
                 </form>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Products;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -26,7 +27,19 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string',
             'status' => 'required|boolean',
-            'image_file' => 'sometimes|image'
+            'image_file' => 'sometimes|image|max:' . Product::MAX_IMAGE_SIZE
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'image_file.max' => 'The :attribute must not be greater than 5 megabytes',
         ];
     }
 }

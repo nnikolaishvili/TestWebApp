@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class StoredenProductsService implements FetchProductsInterface
 {
     const PRODUCTS_PATH = 'products/list.json?nodes=title';
+    const PRODUCT_IMAGES_PATH = 'products/image.json?uid=';
 
     protected $apiUrl;
     protected $key;
@@ -24,6 +25,8 @@ class StoredenProductsService implements FetchProductsInterface
     }
 
     /**
+     * Fetch products
+     *
      * @throws Exception
      */
     public function fetchProducts(): array
@@ -50,6 +53,27 @@ class StoredenProductsService implements FetchProductsInterface
         }
     }
 
+    /**
+     * Fetch images by product uid
+     *
+     * @throws Exception
+     */
+    public function fetchProductImages($productUid)
+    {
+        try {
+            $response = $this->initializeRequest()->get(self::PRODUCT_IMAGES_PATH . $productUid);
+            return $response->json();
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
+            throw new Exception($exception->getMessage());
+        }
+    }
+
+    /**
+     * Initialize request
+     *
+     * @return PendingRequest
+     */
     private function initializeRequest(): PendingRequest
     {
         return Http::baseUrl($this->apiUrl)->withHeaders([

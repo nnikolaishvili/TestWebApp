@@ -27,13 +27,17 @@ class StoredenOrdersService implements FetchOrdersInterface
     }
 
     /**
+     * Fetch orders
+     *
      * @throws Exception
      */
     public function fetchOrders(): array
     {
         try {
-            $statuses = $this->fetchStatuses();
-            OrderStatus::insert($statuses); // TODO REFACTOR
+            if (!OrderStatus::count()) {
+                $statuses = $this->fetchStatuses();
+                OrderStatus::insert($statuses);
+            }
             $statuses = OrderStatus::all();
             $response = $this->initializeRequest()->get(self::ORDERS_PATH);
             $orders = $response->json();
@@ -54,6 +58,8 @@ class StoredenOrdersService implements FetchOrdersInterface
     }
 
     /**
+     * Fetch order statuses
+     *
      * @throws Exception
      */
     public function fetchStatuses(): array
@@ -75,6 +81,11 @@ class StoredenOrdersService implements FetchOrdersInterface
         }
     }
 
+    /**
+     * Initialize request
+     *
+     * @return PendingRequest
+     */
     private function initializeRequest(): PendingRequest
     {
         return Http::baseUrl($this->apiUrl)->withHeaders([

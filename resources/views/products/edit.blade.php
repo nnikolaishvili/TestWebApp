@@ -57,9 +57,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="pt-3 pl-4 pr-8">
+                        <div class="pt-8 pl-4 pr-8">
                             <div class="mb-4" id="image-preview">
-                                <img src="{{ $product->image_url ?? asset('images/no_image.png') }}"
+                                <img src="{{ $product->image_full_path ?? asset('images/no_image.png') }}"
                                      alt="no image image" class="mx-auto" style="max-width: 200px">
                             </div>
                             <div>
@@ -67,7 +67,7 @@
                                        class="block text-center w-1/2 mx-auto cursor-pointer border border-2 border-blue-700 p-1 hover:text-white hover:bg-blue-700 rounded-xl text-blue-700 ">
                                     {{ __('Upload Image') }}
                                 </label>
-                                <input type="file" name="image_file" id="image_file" class="opacity-0 absolute" style="z-index: -1"/>
+                                <input type="file" name="image_file" id="image_file" class="opacity-0 absolute" accept="image/*" style="z-index: -1"/>
                             </div>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         <x-button>{{ __('Save') }}</x-button>
 
                         <!-- Cancel -->
-                        <a href="{{ route('products.index') }}"
+                        <a href="{{ url()->current() == url()->previous() ? route('products.index') : url()->previous() }}"
                            class="text-indigo-600 pl-3 hover:text-indigo-900 text-sm font-medium">{{ __('Go back') }}</a>
                     </div>
                 </form>
