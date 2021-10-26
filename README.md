@@ -44,7 +44,21 @@ foo@bar:~$ php artisan storage:link
 foo@bar:~$ php artisan migrate --seed
 ```
 
+---
+
+For running the server you can use the command
+```console
+foo@bar:~$ php artisan serve
+```
+### Users credentials that you can use to athenticate
+- admin@test.com TestAdmin123
+- editor@test.com TestEditor123
+- assistant@test.com TestAssistant123
+
+
 ### Third party API docs
 
 - **[Orders](https://developers.storeden.com/docs/orders)**
 - **[Products](https://developers.storeden.com/docs/products)**
+
+#### Time spent: 3 days
