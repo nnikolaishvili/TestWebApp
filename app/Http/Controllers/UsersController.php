@@ -12,6 +12,16 @@ use Illuminate\Http\RedirectResponse;
 class UsersController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('can:add-users');
+    }
+
+    /**
      * View of the users
      *
      * @return View

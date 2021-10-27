@@ -17,8 +17,8 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->integer('uid')->unique();
             $table->string('title');
-            $table->float('price');
-            $table->float('final_price');
+            $table->decimal('price');
+            $table->decimal('final_price');
             $table->string('code');
             $table->boolean('status');
             $table->string('image_url')->nullable();

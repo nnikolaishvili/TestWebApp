@@ -18,7 +18,24 @@ class ProductsController extends Controller
 {
     use ImageProcessingTrait;
 
-    public function index(SearchRequest $request)
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('can:view-products');
+        $this->middleware('can:refresh-tables')->only('fetch');
+    }
+
+    /**
+     * Products table view
+     *
+     * @param SearchRequest $request
+     * @return View
+     */
+    public function index(SearchRequest $request): View
     {
         $validated = $request->validated();
         $searchValue = $validated['search'] ?? null;
@@ -44,7 +61,8 @@ class ProductsController extends Controller
         $products = Product::search($validated['search'] ?? null)->get();
         $filename = 'export.csv';
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, Product::TABLE_HEADERS);
+        fputcsv($handle, ['uid', 'title', 'price', 'final_price', 'code', 'status', 'image_url']);
+
         foreach ($products as $product) {
             fputcsv($handle, [
                 $product->uid,
@@ -56,6 +74,7 @@ class ProductsController extends Controller
                 $product->image_full_path
             ]);
         }
+
         fclose($handle);
 
         return Response::download($filename, $filename, ['Content-Type', 'text/csv']);
@@ -101,9 +120,11 @@ class ProductsController extends Controller
     public function update(Product $product, UpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+
         if (isset($validated['image_file'])) {
             $validated['image_url'] = $this->storeImage("images/products/$product->id", $validated['image_file']);
         }
+
         $product->update($validated);
 
         return redirect()->route('products.index');
@@ -143,6 +164,7 @@ class ProductsController extends Controller
     {
         if (!$product->image_url) {
             $response = (new StoredenProductsService())->fetchProductImages($product->uid);
+
             if ($response && $response['images'] && count($response['images'])) {
                 $product->update([
                     'image_url' => $response['images'][0]['thumbnail']

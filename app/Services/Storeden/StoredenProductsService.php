@@ -34,6 +34,7 @@ class StoredenProductsService implements FetchProductsInterface
         try {
             $response = $this->initializeRequest()->get(self::PRODUCTS_PATH);
             $products = $response->json();
+
             return array_map(function ($product) {
                 return [
                     'uid' => $product['uid'],
@@ -49,6 +50,7 @@ class StoredenProductsService implements FetchProductsInterface
             }, $products);
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
+
             throw new Exception($exception->getMessage());
         }
     }
@@ -62,9 +64,11 @@ class StoredenProductsService implements FetchProductsInterface
     {
         try {
             $response = $this->initializeRequest()->get(self::PRODUCT_IMAGES_PATH . $productUid);
+
             return $response->json();
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
+
             throw new Exception($exception->getMessage());
         }
     }

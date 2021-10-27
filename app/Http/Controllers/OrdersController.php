@@ -13,6 +13,18 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class OrdersController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('can:export-order')->only('export');
+        $this->middleware('can:refresh-tables')->only('fetch');
+        $this->middleware('can:modify-order')->only('edit', 'update',' cancel');
+    }
+
+    /**
      * View of the orders
      *
      * @param SearchRequest $request
@@ -44,7 +56,8 @@ class OrdersController extends Controller
         $orders = Order::with('status:id,name')->search($validated['search'] ?? null)->get();
         $filename = 'export.csv';
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, Order::TABLE_HEADERS);
+        fputcsv($handle, ['order ID', 'total', 'date', 'status']);
+
         foreach ($orders as $order) {
             fputcsv($handle, [
                 $order->order_id,
@@ -53,6 +66,7 @@ class OrdersController extends Controller
                 $order->status->name
             ]);
         }
+
         fclose($handle);
 
         return Response::download($filename, $filename, ['Content-Type', 'text/csv']);

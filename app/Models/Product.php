@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Product extends Model
@@ -13,9 +12,8 @@ class Product extends Model
     use HasFactory, SearchableTrait;
 
     const ITEMS_PER_PAGE = 10;
-    const MAX_IMAGE_SIZE = 512; // 5 mb
 
-    const TABLE_HEADERS = ['uid', 'title', 'price', 'final_price', 'code', 'status', 'image_url'];
+    const MAX_IMAGE_SIZE = 512; // 5 mb
 
     const STATUSES = ['Not visible', 'Visible'];
 
@@ -45,26 +43,6 @@ class Product extends Model
     ];
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::deleting(function ($product) {
-            if (Storage::disk('public')->exists($product->image_url)) {
-                Storage::disk('public')->deleteDirectory("images/products/$product->id");
-            }
-        });
-
-        static::updated(function ($product) {
-            if ($product->isDirty('image_url') && Storage::disk('public')->exists($product->getOriginal('image_url'))) {
-                Storage::disk('public')->delete($product->getOriginal('image_url'));
-            }
-        });
-    }
-
-    /**
      * Get products status name
      *
      * @return string
@@ -85,8 +63,10 @@ class Product extends Model
             if (Str::startsWith($this->image_url, ['http', 'https'])) {
                 return $this->image_url;
             }
+
             return config('app.url') . '/storage/' . $this->image_url;
         }
+
         return null;
     }
 }

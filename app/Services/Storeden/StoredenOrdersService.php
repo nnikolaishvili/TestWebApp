@@ -38,9 +38,11 @@ class StoredenOrdersService implements FetchOrdersInterface
                 $statuses = $this->fetchStatuses();
                 OrderStatus::insert($statuses);
             }
+
             $statuses = OrderStatus::all();
             $response = $this->initializeRequest()->get(self::ORDERS_PATH);
             $orders = $response->json();
+
             return array_map(function ($order) use ($statuses) {
                 return [
                     'order_id' => $order['orderID'],
@@ -53,6 +55,7 @@ class StoredenOrdersService implements FetchOrdersInterface
             }, $orders);
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
+
             throw new Exception($exception->getMessage());
         }
     }
@@ -67,6 +70,7 @@ class StoredenOrdersService implements FetchOrdersInterface
         try {
             $response = $this->initializeRequest()->get(self::ORDER_STATUSES_PATH);
             $statuses = call_user_func_array('array_merge', $response->json());
+
             return array_map(function ($key, $value) {
                 return [
                     'name' => $value,
@@ -77,6 +81,7 @@ class StoredenOrdersService implements FetchOrdersInterface
             }, array_keys($statuses), array_values($statuses));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
+
             throw new Exception($exception->getMessage());
         }
     }

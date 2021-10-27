@@ -16,8 +16,6 @@ class Order extends Model
 
     const DELETED_AT = 'canceled_at';
 
-    const TABLE_HEADERS = ['order ID', 'total', 'date', 'status'];
-
     /**
      * The dates
      *

@@ -19,38 +19,27 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 Route::middleware(['auth'])->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [OrdersController::class, 'index'])->name('index');
-        Route::post('/', [OrdersController::class, 'export'])->name('export')->middleware(['can:export-order']);
-        Route::post('/fetch', [OrdersController::class, 'fetch'])->name('fetch')->middleware(['can:refresh-tables']);
-        Route::prefix('{order}')->group(function () {
-            Route::get('/', [OrdersController::class, 'show'])->name('show');
-            Route::middleware(['can:modify-order'])->group(function () {
-                Route::get('/edit', [OrdersController::class, 'edit'])->name('edit');
-                Route::patch('/', [OrdersController::class, 'update'])->name('update');
-                Route::patch('/cancel', [OrdersController::class, 'cancel'])->name('cancel');
-            });
-        });
+        Route::post('/', [OrdersController::class, 'export'])->name('export');
+        Route::post('/fetch', [OrdersController::class, 'fetch'])->name('fetch');
+        Route::patch('/{order}/cancel', [OrdersController::class, 'cancel'])->name('cancel');
     });
-    Route::prefix('products')->middleware(['can:view-products'])->name('products.')->group(function () {
-        Route::get('/', [ProductsController::class, 'index'])->name('index');
+
+    Route::resource('orders', OrdersController::class)->except([
+        'create', 'store', 'destroy'
+    ]);
+
+    Route::prefix('products')->name('products.')->group(function () {
         Route::post('/', [ProductsController::class, 'export'])->name('export');
-        Route::post('/fetch', [ProductsController::class, 'fetch'])->name('fetch')->middleware(['can:refresh-tables']);
-        Route::prefix('{product}')->group(function () {
-            Route::get('/', [ProductsController::class, 'show'])->name('show');
-            Route::get('/edit', [ProductsController::class, 'edit'])->name('edit');
-            Route::patch('/', [ProductsController::class, 'update'])->name('update');
-            Route::delete('/delete', [ProductsController::class, 'destroy'])->name('destroy');
-        });
+        Route::post('/fetch', [ProductsController::class, 'fetch'])->name('fetch');
     });
-    Route::prefix('users')->middleware(['can:add-users'])->name('users.')->group(function () {
-        Route::get('/', [UsersController::class, 'index'])->name('index');
-        Route::get('/create', [UsersController::class, 'create'])->name('create');
-        Route::post('/', [UsersController::class, 'store'])->name('store');
-        Route::prefix('{user}')->group(function () {
-            Route::get('/edit', [UsersController::class, 'edit'])->name('edit');
-            Route::patch('/', [UsersController::class, 'update'])->name('update');
-        });
-    });
+
+    Route::resource('products', ProductsController::class)->except([
+        'create', 'store'
+    ]);
+
+    Route::resource('users', UsersController::class)->except([
+        'show', 'destroy'
+    ]);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
