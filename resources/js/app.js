@@ -19,12 +19,13 @@ $(function () {
         $('#fetch-products-button').prop('disabled', true);
     })
 
-    $(document).on('change', '#image_file', function () {
+    $(document).on('change', '.image-file', function () {
         const file = this.files[0];
+        let id = $(this).attr('id');
         if (file) {
             let reader = new FileReader();
             reader.onload = function (event) {
-                $('#image-preview > img').attr('src', event.target.result);
+                $('#' + id + '-preview' + '> img').attr('src', event.target.result);
             }
             reader.readAsDataURL(file);
         }

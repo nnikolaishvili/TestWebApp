@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Product extends Model
@@ -29,7 +30,6 @@ class Product extends Model
         'final_price',
         'code',
         'status',
-        'image_url'
     ];
 
     /**
@@ -43,6 +43,16 @@ class Product extends Model
     ];
 
     /**
+     * Get product images
+     *
+     * @return HasMany
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    /**
      * Get products status name
      *
      * @return string
@@ -50,23 +60,5 @@ class Product extends Model
     public function getStatusNameAttribute(): string
     {
         return $this->status ? 'Visible' : 'Not visible';
-    }
-
-    /**
-     * Add image full path attribute
-     *
-     * @return string|null
-     */
-    public function getImageFullPathAttribute(): ?string
-    {
-        if ($this->image_url) {
-            if (Str::startsWith($this->image_url, ['http', 'https'])) {
-                return $this->image_url;
-            }
-
-            return config('app.url') . '/storage/' . $this->image_url;
-        }
-
-        return null;
     }
 }

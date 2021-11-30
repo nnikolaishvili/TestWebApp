@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\Interfaces\FetchProductsInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class FetchProductsJob implements ShouldQueue
@@ -36,7 +38,10 @@ class FetchProductsJob implements ShouldQueue
         $products = $fetchProducts->fetchProducts();
 
         if (Product::count()) {
+            Schema::disableForeignKeyConstraints();
+            ProductImage::truncate();
             Product::truncate();
+            Schema::enableForeignKeyConstraints();
             Storage::disk('public')->deleteDirectory('images/products');
         }
 

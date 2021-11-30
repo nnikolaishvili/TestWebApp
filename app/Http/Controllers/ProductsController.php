@@ -6,6 +6,7 @@ use App\Http\Requests\Products\UpdateRequest;
 use App\Http\Requests\SearchRequest;
 use App\Jobs\FetchProductsJob;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\Storeden\StoredenProductsService;
 use App\Traits\ImageProcessingTrait;
 use Exception;
@@ -105,7 +106,8 @@ class ProductsController extends Controller
     {
         $this->checkProductImage($product);
 
-        return view('products.edit', compact('product'))->with([
+        return view('products.edit')->with([
+            'product' => $product->load('images'),
             'statuses' => Product::STATUSES
         ]);
     }
@@ -120,12 +122,15 @@ class ProductsController extends Controller
     public function update(Product $product, UpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-
-        if (isset($validated['image_file'])) {
-            $validated['image_url'] = $this->storeImage("images/products/$product->id", $validated['image_file']);
-        }
-
         $product->update($validated);
+
+        if (isset($validated['images'])) {
+            foreach ($validated['images'] as $id => $image) {
+                ProductImage::find($id)->update([
+                    'image_url' => $this->storeImage("images/products/$product->id", $image)
+                ]);
+            }
+        }
 
         return redirect()->route('products.index');
     }
@@ -162,13 +167,20 @@ class ProductsController extends Controller
      */
     private function checkProductImage($product)
     {
-        if (!$product->image_url) {
+        if (!$product->images()->count()) {
             $response = (new StoredenProductsService())->fetchProductImages($product->uid);
 
             if ($response && $response['images'] && count($response['images'])) {
-                $product->update([
-                    'image_url' => $response['images'][0]['thumbnail']
-                ]);
+                $images = [];
+                foreach ($response['images'] as $image) {
+                    $images[] = [
+                        'product_id' => $product->id,
+                        'image_url' => $image['thumbnail'],
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+                }
+                ProductImage::insert($images);
             }
         }
     }

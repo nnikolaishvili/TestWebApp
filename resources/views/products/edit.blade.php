@@ -58,17 +58,25 @@
                             </div>
                         </div>
                         <div class="pt-8 pl-4 pr-8">
-                            <div class="mb-4" id="image-preview">
-                                <img src="{{ $product->image_full_path ?? asset('images/no_image.png') }}"
-                                     alt="no image image" class="mx-auto" style="max-width: 200px">
-                            </div>
-                            <div>
-                                <label for="image_file"
-                                       class="block text-center w-1/2 mx-auto cursor-pointer border border-2 border-blue-700 p-1 hover:text-white hover:bg-blue-700 rounded-xl text-blue-700 ">
-                                    {{ __('Upload Image') }}
-                                </label>
-                                <input type="file" name="image_file" id="image_file" class="opacity-0 absolute" accept="image/*" style="z-index: -1"/>
-                            </div>
+                            @if ($product->images()->count())
+                                <div class="grid grid-cols-3 gap-2">
+                                    @foreach ($product->images as $image)
+                                        <div>
+                                            <div class="mb-4" id="image_{{ $image->id }}-preview">
+                                                <img src="{{ $image->full_path ?? asset('images/no_image.png') }}"
+                                                     alt="" class="mx-auto" style="max-width: 70px">
+                                            </div>
+                                            <div>
+                                                <label for="image_{{ $image->id }}"
+                                                       class="block text-center w-1/2 mx-auto cursor-pointer border border-2 border-blue-700 p-1 hover:text-white hover:bg-blue-700 rounded-xl text-blue-700 ">
+                                                    <i class="fas fa-upload"></i>
+                                                </label>
+                                                <input type="file" name="images[{{ $image->id }}]" id="image_{{ $image->id }}" class="opacity-0 absolute image-file" accept="image/*" style="z-index: -1"/>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="px-4 py-5">

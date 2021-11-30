@@ -43,7 +43,6 @@ class StoredenProductsService implements FetchProductsInterface
                     'final_price' => $product['final_price'],
                     'code' => $product['code'],
                     'status' => $product['status'],
-                    'image_url' => null,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];

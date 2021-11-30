@@ -27,7 +27,8 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'image_file' => 'sometimes|image|max:' . Product::MAX_IMAGE_SIZE
+            'images' => 'sometimes|array',
+            'images.*' => 'sometimes|image|max:' . Product::MAX_IMAGE_SIZE
         ];
     }
 
@@ -39,7 +40,7 @@ class UpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'image_file.max' => 'The :attribute must not be greater than 5 megabytes',
+            'images.*.max' => 'The :attribute must not be greater than 5 megabytes',
         ];
     }
 }
